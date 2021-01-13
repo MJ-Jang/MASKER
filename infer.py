@@ -60,13 +60,13 @@ def infer_all(model, news_loader, fake_loader, corona_loader, args):
         outp['IND'] = result_fake
         outp['OOD'] = {}
         outp['OOD']['corona'] = result_corona
-        outp['OOD']['news'] = result_news
+        outp['OOD']['agnews'] = result_news
 
     if args.dataset == 'corona':
         outp['IND'] = result_corona
         outp['OOD'] = {}
         outp['OOD']['fake'] = result_fake
-        outp['OOD']['news'] = result_news
+        outp['OOD']['agnews'] = result_news
     return outp
 
 
