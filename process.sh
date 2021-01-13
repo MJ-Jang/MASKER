@@ -12,7 +12,7 @@ cmd="python train.py \
 --backbone $MODEL_TYPE \
 --classifier_type softmax \
 --optimizer adam_vanilla \
---epochs 10
+--epochs 4
 "
 
 echo $cmd
@@ -32,7 +32,7 @@ do
     --lambda_ssl 0.001 \
     --lambda_ent 0.001 \
     --attn_model_path "$DATA_TYPE""_$MODEL_TYPE""-base-uncased.model" \
-    --epochs 5
+    --epochs 7
     "
     echo $cmd
     eval $cmd
