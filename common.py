@@ -40,7 +40,7 @@ def _parse_args_train(parser):
                         choices=['adam_vanilla', 'adam_masker'],
                         default='adam_vanilla', type=str)
     parser.add_argument("--epochs", help='training epochs',
-                        default=10, type=int)
+                        default=7, type=int)
 
     parser.add_argument("--keyword_type", help='keyword type (random|tfidf|attention|etc.)',
                         choices=['random', 'tfidf', 'attention'],
