@@ -43,26 +43,26 @@ def infer_result(model, test_loader):
     return outp
 
 
-def infer_all(model, news_loader, fake_loader, corona_loader):
+def infer_all(model, news_loader, fake_loader, corona_loader, args):
     outp = {}
 
     result_news = infer_result(model, news_loader)
     result_corona = infer_result(model, corona_loader)
     result_fake = infer_result(model, fake_loader)
 
-    if args.data_type == 'news':
+    if args.dataset == 'agnews':
         outp['IND'] = result_news
         outp['OOD'] = {}
         outp['OOD']['corona'] = result_corona
         outp['OOD']['fake'] = result_fake
 
-    if args.data_type == 'fake':
+    if args.dataset == 'fake':
         outp['IND'] = result_fake
         outp['OOD'] = {}
         outp['OOD']['corona'] = result_corona
         outp['OOD']['news'] = result_news
 
-    if args.data_type == 'corona':
+    if args.dataset == 'corona':
         outp['IND'] = result_corona
         outp['OOD'] = {}
         outp['OOD']['fake'] = result_fake
@@ -126,7 +126,7 @@ def main():
     if not args.save_path:
         args.save_path = f'result'
 
-    result = infer_all(model, agnews_loader, fake_loader, corona_loader)
+    result = infer_all(model, agnews_loader, fake_loader, corona_loader, args)
     os.makedirs(args.save_path, exist_ok=True)
 
     save = os.path.join(args.save_path, f'{args.dataset}_outp.dict')
