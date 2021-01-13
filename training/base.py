@@ -23,8 +23,9 @@ def train_base(args, loader, model, optimizer, epoch=0):
         labels = labels.to(device)
 
         labels = labels.squeeze(1)  # (B)
-        print(tokens)
         out_cls = model(tokens)  # (B, C)
+        print("1")
+        print(out_cls)
 
         # classification loss
         if args.classifier_type == 'softmax':
