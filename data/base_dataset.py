@@ -651,7 +651,7 @@ class CoronaDataset(BaseDataset):
             inputs.append(text)
 
         labels = df['Label_idx'].tolist()
-        labels= torch.tensor(labels).long()
+        labels = [torch.tensor(l).long() for l in labels]
 
         if raw_text:
             dataset = zip(inputs, labels)
