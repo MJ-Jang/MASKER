@@ -10,6 +10,7 @@ from data import get_base_dataset, get_biased_dataset, get_masked_dataset
 from models import load_backbone, BaseNet, MaskerNet
 from training import train_base, train_residual, train_masker
 from evals import test_acc, test_pearson
+from tqdm import tqdm
 
 from common import CKPT_PATH, parse_args
 
@@ -70,7 +71,7 @@ def main():
                              batch_size=args.batch_size, num_workers=4)
 
     print('Training model...')
-    for epoch in range(1, args.epochs + 1):
+    for epoch in tqdm(range(1, args.epochs + 1), desc='Epoch'):
         if args.train_type == 'base':
             train_base(args, train_loader, model, optimizer, epoch)
         elif args.train_type == 'residual':

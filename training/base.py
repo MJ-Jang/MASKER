@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from training.common import AverageMeter, one_hot
+from tqdm import tqdm
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -17,7 +18,7 @@ def train_base(args, loader, model, optimizer, epoch=0):
     losses = dict()
     losses['cls'] = AverageMeter()
 
-    for i, (tokens, labels) in enumerate(loader):
+    for i, (tokens, labels) in enumerate(tqdm(loader, total=len(loader))):
         batch_size = tokens.size(0)
         tokens = tokens.to(device)
         labels = labels.to(device)
