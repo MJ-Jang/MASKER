@@ -72,6 +72,6 @@ def _parse_args_eval(parser):
                         default=None, type=str)
     parser.add_argument("--ood_datasets", help='datasets for OOD detection',
                         default=None, nargs="*", type=str)
-    parser.add_argument('--save_path', default=None)
+    parser.add_argument('--save_path', default=None, type=str)
     return parser
 
