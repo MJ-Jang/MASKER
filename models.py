@@ -20,6 +20,11 @@ def load_backbone(name, output_attentions=False):
         backbone = AlbertModel.from_pretrained('albert-base-v2', output_attentions=output_attentions)
         tokenizer = AlbertTokenizer.from_pretrained('albert-base-v2')
         tokenizer.name = 'albert-base-v2'
+    elif name == 'distilbert':
+        from transformers import DistilBertModel, DistilBertTokenizer
+        backbone = DistilBertModel.from_pretrained('distilbert-base-uncased', output_attentions=output_attentions)
+        tokenizer = DistilBertTokenizer.from_pretrained('distilbert-base-uncased')
+        tokenizer.name = 'distilbert-base-uncased'
     else:
         raise ValueError('No matching backbone network')
 
