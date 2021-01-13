@@ -52,7 +52,7 @@ class BaseNet(nn.Module):
             out_cls = self.net_cls(out_p)
             return out_cls
 
-        if self.backbone_name in ['distilbert']:
+        elif self.backbone_name in ['distilbert']:
             attention_mask = (x > 0).float() # 0 is the pad_token for BERT, AlBERT
             outputs = self.backbone(x, attention_mask)  # hidden, pooled
 
@@ -99,7 +99,7 @@ class MaskerNet(nn.Module):
     def forward(self, x, training=False):
         if training:  # training mode
             x_orig, x_mask, x_ood = x.chunk(3, dim=1)  # (original, masked, outlier)
-            if self.backbone_name in ['bert', 'albert']:
+            if self.backbone_name in ['bert', 'albert', 'distilbert']:
                 attention_mask = (x_orig > 0).float()
             elif self.backbone_name in ['roberta']:
                 attention_mask = (x_orig != 1).float()
@@ -117,14 +117,43 @@ class MaskerNet(nn.Module):
                 out_cls = self.dropout(out_cls)
                 out_cls = self.net_cls(out_cls)
 
-            out_ssl = self.backbone(x_mask, attention_mask)[0]  # hidden feature
-            out_ssl = self.dropout(out_ssl)
-            out_ssl = self.net_ssl(out_ssl)  # self-supervision
+            elif self.backbone_name in ['distilbert']:
+                outputs = self.backbone(x, attention_mask)  # hidden, pooled
+                hidden_state = outputs[0]  # (bs, seq_len, dim)
+                pooled_output = hidden_state[:, 0]  # (bs, dim)
+                pooled_output = self.dense(pooled_output)  # (bs, dim)
+                pooled_output = nn.ReLU()(pooled_output)  # (bs, dim)
+                pooled_output = self.dropout(pooled_output)  # (bs, dim)
+                out_cls = self.net_cls(pooled_output)  # (bs, num_labels)
+
+            if self.backbone_name in ['bert', 'albert']:
+                out_ssl = self.backbone(x_mask, attention_mask)[1]  # pooled feature
+                out_ssl = self.dropout(out_ssl)
+                out_ssl = self.net_cls(out_ssl)  # classification (outlier)
+
+            elif self.backbone_name in ['distilbert']:
+                outputs = self.backbone(x_mask, attention_mask)  # hidden, pooled
+                hidden_state = outputs[0]  # (bs, seq_len, dim)
+                pooled_output = hidden_state[:, 0]  # (bs, dim)
+                pooled_output = self.dense(pooled_output)  # (bs, dim)
+                pooled_output = nn.ReLU()(pooled_output)  # (bs, dim)
+                pooled_output = self.dropout(pooled_output)  # (bs, dim)
+                out_ssl = self.net_cls(pooled_output)  # (bs, num_labels)
 
             if self.backbone_name in ['bert', 'albert']:
                 out_ood = self.backbone(x_ood, attention_mask)[1]  # pooled feature
                 out_ood = self.dropout(out_ood)
                 out_ood = self.net_cls(out_ood)  # classification (outlier)
+
+            elif self.backbone_name in ['distilbert']:
+                outputs = self.backbone(x_ood, attention_mask)  # hidden, pooled
+                hidden_state = outputs[0]  # (bs, seq_len, dim)
+                pooled_output = hidden_state[:, 0]  # (bs, dim)
+                pooled_output = self.dense(pooled_output)  # (bs, dim)
+                pooled_output = nn.ReLU()(pooled_output)  # (bs, dim)
+                pooled_output = self.dropout(pooled_output)  # (bs, dim)
+                out_ood = self.net_cls(pooled_output)  # (bs, num_labels)
+
             elif self.backbone_name in ['roberta']:
                 out = self.backbone(x_orig, attention_mask)[0]
                 out_ood = out[:, 0, :] # take cls token (<s>)
