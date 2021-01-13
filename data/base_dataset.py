@@ -732,7 +732,7 @@ class FakeNewsDataset(BaseDataset):
 
         source_path = os.path.join(self.root_dir, f'fake_{mode}.tsv')
         df = pd.read_csv(source_path, sep='\t')
-        
+
         texts = df['Sents'].tolist()
         tokens = self.tokenizer(texts)
         length = [len(l) for l in tokens['input_ids']]
