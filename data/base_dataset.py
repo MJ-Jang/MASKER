@@ -10,7 +10,7 @@ from common import DATA_PATH
 
 
 def tokenize(tokenizer, raw_text):
-    max_len = tokenizer.max_len
+    max_len = tokenizer.model_max_length
 
     if len(raw_text) > max_len:
         raw_text = raw_text[:max_len]
