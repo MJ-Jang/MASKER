@@ -190,9 +190,10 @@ def get_attention_keyword(dataset, attn_model, keyword_per_class=10):
 
         with torch.no_grad():
             print(attn_model(tokens).size())
-            _, attention_layers = attn_model(tokens)
+            attention_layers = attn_model(tokens)
 
-        attention = attention_layers[-1]  # attention of final layer (batch_size, num_heads, max_len, max_len)
+        attention = attention_layers[0]  # attention of final layer (batch_size, num_heads, max_len, max_len) # 0 for distil bert
+        print(attention.size())
         attention = attention.sum(dim=1)  # sum over attention heads (batch_size, max_len, max_len)
 
         for i in range(attention.size(0)):  # batch_size
