@@ -30,7 +30,7 @@ do
     --optimizer adam_masker    \
     --keyword_type attention \
     --lambda_ssl 0.001 \
-    --lambda_ent 0.0001   \
+    --lambda_ent 0.001 \
     --attn_model_path "$DATA_TYPE""_$MODEL_TYPE""-base-uncased.model" \
     --epochs 5
     "
