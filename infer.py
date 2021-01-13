@@ -38,7 +38,6 @@ def infer_result(model, test_loader):
         "pred": pred_id,
         "maxprob": maxprob_id,
         "prob": prob_id,
-        "gt": df[label_n].tolist()
     }
 
     return outp
