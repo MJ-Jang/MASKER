@@ -44,7 +44,7 @@ class BaseNet(nn.Module):
         self.net_cls = nn.Linear(768, n_classes)  # classification layer
 
     def forward(self, x):
-        if self.backbone_name in ['bert', 'albert', 'distilbert']:
+        if self.backbone_name in ['bert', 'albert']:
             attention_mask = (x > 0).float() # 0 is the pad_token for BERT, AlBERT
             outputs = self.backbone(x, attention_mask)  # hidden, pooled
             outputs = outputs[1]
