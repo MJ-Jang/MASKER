@@ -6,7 +6,8 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 
-from data.base_dataset import NewsDataset, ReviewDataset, IMDBDataset, SST2Dataset, FoodDataset, ReutersDataset, MSRvidDataset, ImagesDataset, MSRparDataset, HeadlinesDataset
+from data.base_dataset import NewsDataset, ReviewDataset, IMDBDataset, SST2Dataset, FoodDataset,\
+    ReutersDataset, MSRvidDataset, ImagesDataset, MSRparDataset, HeadlinesDataset, CoronaDataset
 from data.masked_dataset import MaskedDataset
 from data.biased_dataset import BiasedDataset
 from models import load_backbone
@@ -40,6 +41,8 @@ def get_base_dataset(data_name, tokenizer, split_ratio=1.0, seed=0, test_only=Fa
         dataset = MSRparDataset(tokenizer, test_only=test_only)
     elif data_name == 'headlines':
         dataset = HeadlinesDataset(tokenizer, test_only=test_only)
+    elif data_name == 'corona':
+        dataset = CoronaDataset(tokenizer, test_only=test_only)
     else:
         raise ValueError('No matching dataset')
 

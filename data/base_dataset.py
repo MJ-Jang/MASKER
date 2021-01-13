@@ -5,6 +5,7 @@ from abc import *
 import torch
 from torch.utils.data import TensorDataset
 import numpy as np
+import pandas as pd
 
 from common import DATA_PATH
 
@@ -415,6 +416,7 @@ class ReutersDataset(BaseDataset):
 
         return dataset
 
+
 class MSRvidDataset(BaseDataset):
     def __init__(self, tokenizer, test_only=False):
         super(MSRvidDataset, self).__init__('msrvid', 1, tokenizer, test_only=test_only)
@@ -516,6 +518,7 @@ class ImagesDataset(BaseDataset):
 
         return dataset
 
+
 class MSRparDataset(BaseDataset):
     def __init__(self, tokenizer, test_only=False):
         super(MSRparDataset, self).__init__('msrpar', 1, tokenizer, test_only=test_only)
@@ -610,6 +613,45 @@ class HeadlinesDataset(BaseDataset):
 
             inputs.append(text)
             labels.append(label)
+
+        if raw_text:
+            dataset = zip(inputs, labels)
+        else:
+            dataset = create_tensor_dataset(inputs, labels)
+
+        return dataset
+
+
+
+class CoronaDataset(BaseDataset):
+    def __init__(self, tokenizer, test_only=False):
+        super(CoronaDataset, self).__init__('corona', 1, tokenizer, test_only=test_only)
+
+    def _preprocess(self):
+        print('Pre-processing Corona Tweets dataset...')
+        train_dataset = self._load_dataset('train')
+        test_dataset = self._load_dataset('test')
+
+        torch.save(train_dataset, self._train_path)
+        torch.save(test_dataset, self._test_path)
+
+    def _load_dataset(self, mode='train', raw_text=False):
+        assert mode in ['train', 'test']
+
+        source_path = os.path.join(self.root_dir, f'corona_{mode}.tsv')
+        df = pd.read_csv(source_path, sep='\t')
+
+        inputs = []
+
+        for s in inputs:
+            if raw_text:
+                text = s
+            else:
+                text = tokenize(self.tokenizer, s)
+            inputs.append(text)
+
+        label = df['Label_idx'].tolist()
+        label = torch.tensor(label).long()
 
         if raw_text:
             dataset = zip(inputs, labels)
