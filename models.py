@@ -170,5 +170,15 @@ class MaskerNet(nn.Module):
                 out_cls = torch.tanh(out_cls)
                 out_cls = self.dropout(out_cls)
                 out_cls = self.net_cls(out_cls)
+            elif self.backbone_name in ['distilbert']:
+                attention_mask = (x > 0).float()  # 0 is the pad_token for BERT, AlBERT
+                outputs = self.backbone(x, attention_mask)  # hidden, pooled
+
+                hidden_state = outputs[0]  # (bs, seq_len, dim)
+                pooled_output = hidden_state[:, 0]  # (bs, dim)
+                pooled_output = self.dense(pooled_output)  # (bs, dim)
+                pooled_output = nn.ReLU()(pooled_output)  # (bs, dim)
+                pooled_output = self.dropout(pooled_output)  # (bs, dim)
+                out_cls = self.net_cls(pooled_output)  # (bs, num_labels)
             return out_cls
 
