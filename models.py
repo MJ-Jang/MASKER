@@ -126,19 +126,9 @@ class MaskerNet(nn.Module):
                 pooled_output = self.dropout(pooled_output)  # (bs, dim)
                 out_cls = self.net_cls(pooled_output)  # (bs, num_labels)
 
-            if self.backbone_name in ['bert', 'albert']:
-                out_ssl = self.backbone(x_mask, attention_mask)[1]  # pooled feature
-                out_ssl = self.dropout(out_ssl)
-                out_ssl = self.net_cls(out_ssl)  # classification (outlier)
-
-            elif self.backbone_name in ['distilbert']:
-                outputs = self.backbone(x_mask, attention_mask)  # hidden, pooled
-                hidden_state = outputs[0]  # (bs, seq_len, dim)
-                pooled_output = hidden_state[:, 0]  # (bs, dim)
-                pooled_output = self.dense(pooled_output)  # (bs, dim)
-                pooled_output = nn.ReLU()(pooled_output)  # (bs, dim)
-                pooled_output = self.dropout(pooled_output)  # (bs, dim)
-                out_ssl = self.net_cls(pooled_output)  # (bs, num_labels)
+            out_ssl = self.backbone(x_mask, attention_mask)[0]  # hidden feature
+            out_ssl = self.dropout(out_ssl)
+            out_ssl = self.net_ssl(out_ssl)  # self-supervision
 
             if self.backbone_name in ['bert', 'albert']:
                 out_ood = self.backbone(x_ood, attention_mask)[1]  # pooled feature
