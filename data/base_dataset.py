@@ -13,6 +13,8 @@ from common import DATA_PATH
 def tokenize(tokenizer, raw_text, max_len=None):
     if not max_len:
         max_len = tokenizer.model_max_length
+    else:
+        max_len = max_len
 
     if len(raw_text) > max_len:
         raw_text = raw_text[:max_len]
@@ -644,7 +646,8 @@ class CoronaDataset(BaseDataset):
         df = pd.read_csv(source_path, sep='\t')
 
         texts = df['Sents'].tolist()
-        length = [len(self.tokenizer.tokenize(s)) for s in texts]
+        tokens = self.tokenizer(texts)
+        length = [len(l) for l in tokens['input_ids']]
         max_len = max(length)
 
         inputs = []
@@ -687,7 +690,8 @@ class AGNewsDataset(BaseDataset):
         df = pd.read_csv(source_path, sep='\t')
 
         texts = df['Sents'].tolist()
-        length = [len(self.tokenizer.tokenize(s)) for s in texts]
+        tokens = self.tokenizer(texts)
+        length = [len(l) for l in tokens['input_ids']]
         max_len = max(length)
 
         inputs = []
@@ -728,9 +732,10 @@ class FakeNewsDataset(BaseDataset):
 
         source_path = os.path.join(self.root_dir, f'fake_{mode}.tsv')
         df = pd.read_csv(source_path, sep='\t')
-
+        
         texts = df['Sents'].tolist()
-        length = [len(self.tokenizer.tokenize(s)) for s in texts]
+        tokens = self.tokenizer(texts)
+        length = [len(l) for l in tokens['input_ids']]
         max_len = max(length)
 
         inputs = []
