@@ -45,7 +45,7 @@ do
     --ood_datasets remain \\
     --backbone $MODEL_TYPE \\
     --classifier_type softmax \\
-    --model_path "$DATA_TYPE""_$MODEL_TYPE""-base-uncased.model" \\
+    --model_path "$DATA_TYPE""_$MODEL_TYPE""-base-uncased_masker.model" \\
     --save_path=result/$var
     "
     echo $cmd
