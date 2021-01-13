@@ -12,7 +12,7 @@ cmd="python train.py \
 --backbone $MODEL_TYPE \
 --classifier_type softmax \
 --optimizer adam_vanilla \
---epochs 4
+--epochs 3
 "
 
 echo $cmd
