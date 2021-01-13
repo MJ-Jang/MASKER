@@ -626,7 +626,8 @@ class HeadlinesDataset(BaseDataset):
 class CoronaDataset(BaseDataset):
     def __init__(self, tokenizer, test_only=False):
         super(CoronaDataset, self).__init__('corona', 1, tokenizer, test_only=test_only)
-
+        self.n_classes = 5
+        
     def _preprocess(self):
         print('Pre-processing Corona Tweets dataset...')
         train_dataset = self._load_dataset('train')
