@@ -717,7 +717,7 @@ class FakeNewsDataset(BaseDataset):
     def _load_dataset(self, mode='train', raw_text=False):
         assert mode in ['train', 'test']
 
-        source_path = os.path.join(self.root_dir, f'agnews_{mode}.tsv')
+        source_path = os.path.join(self.root_dir, f'fake_{mode}.tsv')
         df = pd.read_csv(source_path, sep='\t')
 
         inputs = []
