@@ -102,7 +102,7 @@ def main():
                                batch_size=args.batch_size, num_workers=4)
     fake_loader = DataLoader(fake_dataset.test_dataset, shuffle=False,
                                batch_size=args.batch_size, num_workers=4)
-    if args.dataset == 'agenws':
+    if args.dataset == 'agnews':
         model = BaseNet(args.backbone, backbone, agnews_dataset.n_classes).to(device)
     elif args.dataset == 'fake':
         model = BaseNet(args.backbone, backbone, fake_dataset.n_classes).to(device)
