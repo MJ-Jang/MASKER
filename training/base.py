@@ -21,9 +21,9 @@ def train_base(args, loader, model, optimizer, epoch=0):
         batch_size = tokens.size(0)
         tokens = tokens.to(device)
         labels = labels.to(device)
-        print(tokens)
+
         labels = labels.squeeze(1)  # (B)
-        out_cls = model(tokens)  # (B, C)
+        out_cls = model(okens)  # (B, C)
 
 
         # classification loss
