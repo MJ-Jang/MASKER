@@ -41,7 +41,6 @@ def train_masker(args, loader, model, optimizer, epoch=0):
             loss_cls = F.binary_cross_entropy_with_logits(out_cls, labels_cls)
 
         # self-supervision loss
-        print(out_ssl.size())
         out_ssl = out_ssl.permute(0, 2, 1)
         loss_ssl = F.cross_entropy(out_ssl, labels_ssl, ignore_index=-1)  # ignore non-masks (-1)
         loss_ssl = loss_ssl * args.lambda_ssl
