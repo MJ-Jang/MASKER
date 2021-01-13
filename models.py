@@ -46,8 +46,9 @@ class BaseNet(nn.Module):
     def forward(self, x):
         if self.backbone_name in ['bert', 'albert', 'distilbert']:
             attention_mask = (x > 0).float() # 0 is the pad_token for BERT, AlBERT
-            logits = self.backbone(x, attention_mask).logits  # hidden, pooled
-            out_p = self.dropout(logits)
+            outputs = self.backbone(x, attention_mask)  # hidden, pooled
+            outputs = outputs[1]
+            out_p = self.dropout(outputs)
             out_cls = self.net_cls(out_p)
             return out_cls
 
