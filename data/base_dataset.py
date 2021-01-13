@@ -627,7 +627,7 @@ class CoronaDataset(BaseDataset):
     def __init__(self, tokenizer, test_only=False):
         super(CoronaDataset, self).__init__('corona', 1, tokenizer, test_only=test_only)
         self.n_classes = 5
-        
+
     def _preprocess(self):
         print('Pre-processing Corona Tweets dataset...')
         train_dataset = self._load_dataset('train')
@@ -660,3 +660,82 @@ class CoronaDataset(BaseDataset):
             dataset = create_tensor_dataset(inputs, labels)
 
         return dataset
+
+
+class AGNewsDataset(BaseDataset):
+    def __init__(self, tokenizer, test_only=False):
+        super(AGNewsDataset, self).__init__('agnews', 1, tokenizer, test_only=test_only)
+        self.n_classes = 4
+
+    def _preprocess(self):
+        print('Pre-processing AGNews Tweets dataset...')
+        train_dataset = self._load_dataset('train')
+        test_dataset = self._load_dataset('test')
+
+        torch.save(train_dataset, self._train_path)
+        torch.save(test_dataset, self._test_path)
+
+    def _load_dataset(self, mode='train', raw_text=False):
+        assert mode in ['train', 'test']
+
+        source_path = os.path.join(self.root_dir, f'agnews_{mode}.tsv')
+        df = pd.read_csv(source_path, sep='\t')
+
+        inputs = []
+
+        for s in df['Sents'].tolist():
+            if raw_text:
+                text = s
+            else:
+                text = tokenize(self.tokenizer, s)
+            inputs.append(text)
+
+        labels = df['Label_idx'].tolist()
+        labels = [torch.tensor(l).long() for l in labels]
+
+        if raw_text:
+            dataset = zip(inputs, labels)
+        else:
+            dataset = create_tensor_dataset(inputs, labels)
+
+        return dataset
+
+
+class FakeNewsDataset(BaseDataset):
+    def __init__(self, tokenizer, test_only=False):
+        super(FakeNewsDataset, self).__init__('fake', 1, tokenizer, test_only=test_only)
+        self.n_classes = 2
+
+    def _preprocess(self):
+        print('Pre-processing FakeNews Tweets dataset...')
+        train_dataset = self._load_dataset('train')
+        test_dataset = self._load_dataset('test')
+
+        torch.save(train_dataset, self._train_path)
+        torch.save(test_dataset, self._test_path)
+
+    def _load_dataset(self, mode='train', raw_text=False):
+        assert mode in ['train', 'test']
+
+        source_path = os.path.join(self.root_dir, f'agnews_{mode}.tsv')
+        df = pd.read_csv(source_path, sep='\t')
+
+        inputs = []
+
+        for s in df['Sents'].tolist():
+            if raw_text:
+                text = s
+            else:
+                text = tokenize(self.tokenizer, s)
+            inputs.append(text)
+
+        labels = df['Label_idx'].tolist()
+        labels = [torch.tensor(l).long() for l in labels]
+
+        if raw_text:
+            dataset = zip(inputs, labels)
+        else:
+            dataset = create_tensor_dataset(inputs, labels)
+
+        return dataset
+
