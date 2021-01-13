@@ -10,8 +10,9 @@ import pandas as pd
 from common import DATA_PATH
 
 
-def tokenize(tokenizer, raw_text):
-    max_len = tokenizer.model_max_length
+def tokenize(tokenizer, raw_text, max_len=None):
+    if not max_len:
+        max_len = tokenizer.model_max_length
 
     if len(raw_text) > max_len:
         raw_text = raw_text[:max_len]
@@ -642,13 +643,17 @@ class CoronaDataset(BaseDataset):
         source_path = os.path.join(self.root_dir, f'corona_{mode}.tsv')
         df = pd.read_csv(source_path, sep='\t')
 
+        texts = df['Sents'].tolist()
+        length = [len(self.tokenizer.tokenize(s)) for s in texts]
+        max_len = max(length)
+
         inputs = []
 
-        for s in df['Sents'].tolist():
+        for s in texts:
             if raw_text:
                 text = s
             else:
-                text = tokenize(self.tokenizer, s)
+                text = tokenize(self.tokenizer, s, max_len=max_len)
             inputs.append(text)
 
         labels = df['Label_idx'].tolist()
@@ -681,13 +686,17 @@ class AGNewsDataset(BaseDataset):
         source_path = os.path.join(self.root_dir, f'agnews_{mode}.tsv')
         df = pd.read_csv(source_path, sep='\t')
 
+        texts = df['Sents'].tolist()
+        length = [len(self.tokenizer.tokenize(s)) for s in texts]
+        max_len = max(length)
+
         inputs = []
 
-        for s in df['Sents'].tolist():
+        for s in texts:
             if raw_text:
                 text = s
             else:
-                text = tokenize(self.tokenizer, s)
+                text = tokenize(self.tokenizer, s, max_len=max_len)
             inputs.append(text)
 
         labels = df['Label_idx'].tolist()
@@ -720,13 +729,17 @@ class FakeNewsDataset(BaseDataset):
         source_path = os.path.join(self.root_dir, f'fake_{mode}.tsv')
         df = pd.read_csv(source_path, sep='\t')
 
+        texts = df['Sents'].tolist()
+        length = [len(self.tokenizer.tokenize(s)) for s in texts]
+        max_len = max(length)
+
         inputs = []
 
-        for s in df['Sents'].tolist():
+        for s in texts:
             if raw_text:
                 text = s
             else:
-                text = tokenize(self.tokenizer, s)
+                text = tokenize(self.tokenizer, s, max_len=max_len)
             inputs.append(text)
 
         labels = df['Label_idx'].tolist()
