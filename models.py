@@ -118,7 +118,7 @@ class MaskerNet(nn.Module):
                 out_cls = self.net_cls(out_cls)
 
             elif self.backbone_name in ['distilbert']:
-                outputs = self.backbone(x, attention_mask)  # hidden, pooled
+                outputs = self.backbone(x_orig, attention_mask)  # hidden, pooled
                 hidden_state = outputs[0]  # (bs, seq_len, dim)
                 pooled_output = hidden_state[:, 0]  # (bs, dim)
                 pooled_output = self.dense(pooled_output)  # (bs, dim)
@@ -155,7 +155,7 @@ class MaskerNet(nn.Module):
                 out_ood = self.net_cls(pooled_output)  # (bs, num_labels)
 
             elif self.backbone_name in ['roberta']:
-                out = self.backbone(x_orig, attention_mask)[0]
+                out = self.backbone(x_ood, attention_mask)[0]
                 out_ood = out[:, 0, :] # take cls token (<s>)
                 out_ood = self.dropout(out_ood)
                 out_ood = self.dense(out_ood)
