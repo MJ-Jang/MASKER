@@ -189,6 +189,7 @@ def get_attention_keyword(dataset, attn_model, keyword_per_class=10):
         tokens = tokens.to(device)
 
         with torch.no_grad():
+            print(attn_model(tokens))
             _, attention_layers = attn_model(tokens)
 
         print(attention_layers)
