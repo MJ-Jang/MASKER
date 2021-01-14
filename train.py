@@ -76,6 +76,9 @@ def main():
                              batch_size=args.batch_size, num_workers=0)
 
     print('Training model...')
+    if args.dataset == 'corona' and args.train_type == 'base':
+        args.epochs = 5
+        
     for epoch in tqdm(range(1, args.epochs + 1), desc='Epoch'):
         if args.train_type == 'base':
             train_base(args, train_loader, model, optimizer, epoch)
