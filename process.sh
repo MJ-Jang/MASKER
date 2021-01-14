@@ -1,8 +1,8 @@
 MODEL_TYPE=$1
 DATA_TYPE=$2
 
-#list="01 02 03 04 05 06 07 08 09 10"
-list="01 02 03 04 05"
+list="01 02 03 04 05 06 07 08 09 10"
+#list="01 02 03 04 05"
 
 
 cmd="python train.py \
