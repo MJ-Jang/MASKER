@@ -60,7 +60,7 @@ def main():
             {'params': model.backbone.parameters(), 'lr': 5e-6}
         ], lr=1e-5, eps=1e-8)
     else:
-        optimizer = optim.Adam(model.parameters(), lr=1e-5, eps=1e-8)
+        optimizer = optim.Adam(model.parameters(), lr=1e-4, eps=1e-8)
         # optimizer = AdamW(model.parameters(), lr=1e-4)
 
     if torch.cuda.device_count() > 1:
