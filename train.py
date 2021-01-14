@@ -61,7 +61,7 @@ def main():
         ], lr=1e-5, eps=1e-8)
     else:
         if args.dataset == 'corona':
-            optimizer = optim.Adam(model.parameters(), lr=5e-5, eps=1e-8)
+            optimizer = optim.Adam(model.parameters(), lr=1e-6, eps=1e-8)
         else:
             optimizer = optim.Adam(model.parameters(), lr=1e-5, eps=1e-8)
 
