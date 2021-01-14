@@ -38,8 +38,8 @@ class DistilBertBase(DistilBertPreTrainedModel):
         super().__init__(config)
         self.num_labels = config.num_labels
         self.n_classes = config.num_labels
-        
-        self.distilbert = DistilBertModel(config)
+
+        self.backbone = DistilBertModel(config)
         self.dense = nn.Linear(config.dim, config.dim)
         self.net_cls = nn.Linear(config.dim, config.num_labels)
         self.dropout = nn.Dropout(config.seq_classif_dropout)
