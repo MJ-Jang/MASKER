@@ -7,7 +7,7 @@ list="01 02 03 04 05 06 07 08 09 10"
 for var in $list
 do
     rm -rf "$DATA_TYPE""_$MODEL_TYPE""-base-uncased_train_masked_attention_10.pth"
-    
+
     cmd="python train.py \
     --dataset $DATA_TYPE \
     --split_ratio 0.1 \
@@ -34,7 +34,7 @@ do
     --lambda_ssl 0.001 \
     --lambda_ent 0.001 \
     --attn_model_path "$DATA_TYPE""_$MODEL_TYPE""-base-uncased.model" \
-    --epochs 7
+    --epochs 6
     "
     echo $cmd
     eval $cmd
