@@ -38,8 +38,7 @@ do
 #    echo $cmd
 #    eval $cmd
 
-    cmd="python infer.py \\
-    --dataset $DATA_TYPE \\
+    cmd="python infer.py --dataset $DATA_TYPE \\
     --split_ratio 0.1 \\
     --seed 1234 \\
     --eval_type ood \\
