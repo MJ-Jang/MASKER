@@ -27,7 +27,7 @@ def main():
         else:
             args.batch_size = 8
     else:
-        args.batch_size = 32
+        args.batch_size = 16
 
     print('Loading pre-trained backbone network...')
     backbone, tokenizer = load_backbone(args.backbone)
