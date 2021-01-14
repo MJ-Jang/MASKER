@@ -37,7 +37,8 @@ class DistilBertBase(DistilBertPreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
         self.num_labels = config.num_labels
-
+        self.n_classes = config.num_labels
+        
         self.distilbert = DistilBertModel(config)
         self.dense = nn.Linear(config.dim, config.dim)
         self.net_cls = nn.Linear(config.dim, config.num_labels)
