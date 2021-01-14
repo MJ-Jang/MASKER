@@ -4,23 +4,24 @@ DATA_TYPE=$2
 list="01 02 03 04 05 06 07 08 09 10"
 #list="01 02 03 04 05"
 
-
-cmd="python train.py \
---dataset $DATA_TYPE \
---split_ratio 0.1 \
---seed 1234  \
---train_type base \
---backbone $MODEL_TYPE \
---classifier_type softmax \
---optimizer adam_vanilla \
---epochs 3
-"
-
-echo $cmd
-eval $cmd
-
 for var in $list
 do
+    rm -rf "$DATA_TYPE""_$MODEL_TYPE""-base-uncased_train_masked_attention_10.pth"
+    
+    cmd="python train.py \
+    --dataset $DATA_TYPE \
+    --split_ratio 0.1 \
+    --seed 1234  \
+    --train_type base \
+    --backbone $MODEL_TYPE \
+    --classifier_type softmax \
+    --optimizer adam_vanilla \
+    --epochs 3
+    "
+
+    echo $cmd
+    eval $cmd
+
     cmd="python train.py \
     --dataset $DATA_TYPE \
     --split_ratio 0.1 \
