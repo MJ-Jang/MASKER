@@ -38,14 +38,14 @@ do
 #    echo $cmd
 #    eval $cmd
 
-    cmd="python infer.py --dataset $DATA_TYPE \\
-    --split_ratio 0.1 \\
-    --seed 1234 \\
-    --eval_type ood \\
-    --ood_datasets remain \\
-    --backbone $MODEL_TYPE \\
-    --classifier_type softmax \\
-    --model_path "$DATA_TYPE""_$MODEL_TYPE""-base-uncased_masker.model" \\
+    cmd="python infer.py --dataset $DATA_TYPE \
+    --split_ratio 0.1 \
+    --seed 1234 \
+    --eval_type ood \
+    --ood_datasets remain \
+    --backbone $MODEL_TYPE \
+    --classifier_type softmax \
+    --model_path "$DATA_TYPE""_$MODEL_TYPE""-base-uncased_masker.model" \
     --save_path=result/$var
     "
     echo $cmd
