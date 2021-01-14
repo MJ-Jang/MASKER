@@ -53,7 +53,8 @@ class BaseNet(nn.Module):
             return out_cls
 
         elif self.backbone_name in ['distilbert']:
-            attention_mask = (x > 0).float() # 0 is the pad_token for BERT, AlBERT
+            # attention_mask = (x > 0).float() # 0 is the pad_token for DistilBERT
+            attention_mask = (x > 0).long() # 0 is the pad_token for DistilBERT
             outputs = self.backbone(x, attention_mask)  # hidden, pooled
 
             hidden_state = outputs[0]  # (bs, seq_len, dim)
@@ -100,7 +101,8 @@ class MaskerNet(nn.Module):
         if training:  # training mode
             x_orig, x_mask, x_ood = x.chunk(3, dim=1)  # (original, masked, outlier)
             if self.backbone_name in ['bert', 'albert', 'distilbert']:
-                attention_mask = (x_orig > 0).float()
+                # attention_mask = (x_orig > 0).float()
+                attention_mask = (x_orig > 0).long()
             elif self.backbone_name in ['roberta']:
                 attention_mask = (x_orig != 1).float()
 
