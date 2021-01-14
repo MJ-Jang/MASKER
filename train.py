@@ -30,8 +30,8 @@ def main():
         args.batch_size = 8
 
     print('Loading pre-trained backbone network...')
-    # backbone, tokenizer = load_backbone(args.backbone)
-    _, tokenizer = load_backbone(args.backbone)
+    backbone, tokenizer = load_backbone(args.backbone)
+    # _, tokenizer = load_backbone(args.backbone)
     print('Initializing dataset and model...')
     if args.train_type in ['base', 'residual']:
         # load base/biased dataset and base model
@@ -40,8 +40,8 @@ def main():
         else:
             dataset = get_biased_dataset(args, args.dataset, tokenizer, args.keyword_type, args.keyword_per_class,
                                          args.split_ratio, args.seed)
-        # model = BaseNet(args.backbone, backbone, dataset.n_classes).to(device)
-        model = DistilBertBase.from_pretrained('distilbert-base-uncased', num_labels=dataset.n_classes).to(device)
+        model = BaseNet(args.backbone, backbone, dataset.n_classes).to(device)
+
         # load biased model
         if args.train_type == 'residual':
             assert args.biased_model_path is not None
