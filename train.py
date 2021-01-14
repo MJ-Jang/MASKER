@@ -27,7 +27,7 @@ def main():
         else:
             args.batch_size = 8
     else:
-        args.batch_size = 8
+        args.batch_size = 32
 
     print('Loading pre-trained backbone network...')
     backbone, tokenizer = load_backbone(args.backbone)
@@ -69,9 +69,9 @@ def main():
             biased_model = nn.DataParallel(biased_model)
 
     train_loader = DataLoader(dataset.train_dataset, shuffle=True, drop_last=True,
-                              batch_size=args.batch_size, num_workers=4)
+                              batch_size=args.batch_size, num_workers=0)
     test_loader = DataLoader(dataset.test_dataset, shuffle=False,
-                             batch_size=args.batch_size, num_workers=4)
+                             batch_size=args.batch_size, num_workers=0)
 
     print('Training model...')
     for epoch in tqdm(range(1, args.epochs + 1), desc='Epoch'):

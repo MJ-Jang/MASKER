@@ -70,20 +70,6 @@ def infer_all(model, news_loader, fake_loader, corona_loader, args):
     return outp
 
 
-def process(model, news_loader, fake_loader, corona_loader):
-
-    result = infer_all(model, news_test, corona_test, fake_test)
-
-    num = args.model_path.split('/')[-1]
-    save_path = os.path.join(args.save_path, 'noier', args.model_type, num)
-    os.makedirs(save_path, exist_ok=True)
-    save_prefix = f'{args.model_type}_{args.data_type}_abl{args.ablation}_del{args.pr_del}' \
-        f'_repl{args.pr_repl}_perm{args.perm_ratio}_noise{args.do_noise}_outp.dict'
-    save = os.path.join(save_path, save_prefix)
-    with open(save, 'wb') as saveFile:
-        dill.dump(result, saveFile)
-
-
 def main():
     args = parse_args(mode='eval')
 
@@ -97,11 +83,11 @@ def main():
     fake_dataset = get_base_dataset('fake', tokenizer, args.split_ratio, args.seed, test_only=True)
 
     agnews_loader = DataLoader(agnews_dataset.test_dataset, shuffle=False,
-                               batch_size=args.batch_size, num_workers=4)
+                               batch_size=args.batch_size, num_workers=0)
     corona_loader = DataLoader(corona_dataset.test_dataset, shuffle=False,
-                               batch_size=args.batch_size, num_workers=4)
+                               batch_size=args.batch_size, num_workers=0)
     fake_loader = DataLoader(fake_dataset.test_dataset, shuffle=False,
-                               batch_size=args.batch_size, num_workers=4)
+                               batch_size=args.batch_size, num_workers=0)
     if args.dataset == 'agnews':
         model = BaseNet(args.backbone, backbone, agnews_dataset.n_classes).to(device)
     elif args.dataset == 'fake':
@@ -119,6 +105,7 @@ def main():
             state_dict.pop(key)
 
     model.load_state_dict(state_dict)
+    model.eval()
 
     if torch.cuda.device_count() > 1:
         model = nn.DataParallel(model)
