@@ -39,7 +39,7 @@ class BaseNet(nn.Module):
         self.backbone_name = backbone_name
         self.backbone = backbone
         self.n_classes = n_classes
-        self.dropout = nn.Dropout(0.1)
+        self.dropout = nn.Dropout(0.5)
         self.dense = nn.Linear(768,768)
         self.net_cls = nn.Linear(768, n_classes)  # classification layer
 
@@ -83,7 +83,7 @@ class MaskerNet(nn.Module):
         super(MaskerNet, self).__init__()
         self.backbone = backbone
         self.backbone_name = backbone_name
-        self.dropout = nn.Dropout(0.1)
+        self.dropout = nn.Dropout(0.5)
         self.n_classes = n_classes
         self.vocab_size = vocab_size
 
