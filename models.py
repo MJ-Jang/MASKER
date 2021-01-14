@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+from transformers import DistilBertModel, DistilBertTokenizer, DistilBertPreTrainedModel
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
@@ -29,6 +31,31 @@ def load_backbone(name, output_attentions=False):
         raise ValueError('No matching backbone network')
 
     return backbone, tokenizer
+
+
+class DistilBertBase(DistilBertPreTrainedModel):
+    def __init__(self, config):
+        super().__init__(config)
+        self.num_labels = config.num_labels
+
+        self.distilbert = DistilBertModel(config)
+        self.dense = nn.Linear(config.dim, config.dim)
+        self.net_cls = nn.Linear(config.dim, config.num_labels)
+        self.dropout = nn.Dropout(config.seq_classif_dropout)
+
+        self.init_weights()
+
+    def forward(self, x):
+        attention_mask = (x > 0).long()  # 0 is the pad_token for DistilBERT
+        outputs = self.backbone(x, attention_mask)  # hidden, pooled
+
+        hidden_state = outputs[0]  # (bs, seq_len, dim)
+        pooled_output = hidden_state[:, 0]  # (bs, dim)
+        pooled_output = self.dense(pooled_output)  # (bs, dim)
+        pooled_output = nn.ReLU()(pooled_output)  # (bs, dim)
+        pooled_output = self.dropout(pooled_output)  # (bs, dim)
+        logits = self.net_cls(pooled_output)  # (bs, num_labels)
+        return logits
 
 
 class BaseNet(nn.Module):

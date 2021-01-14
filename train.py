@@ -7,7 +7,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 
 from data import get_base_dataset, get_biased_dataset, get_masked_dataset
-from models import load_backbone, BaseNet, MaskerNet
+from models import load_backbone, BaseNet, MaskerNet, DistilBertBase
 from training import train_base, train_residual, train_masker
 from evals import test_acc, test_pearson
 from tqdm import tqdm
@@ -40,7 +40,8 @@ def main():
         else:
             dataset = get_biased_dataset(args, args.dataset, tokenizer, args.keyword_type, args.keyword_per_class,
                                          args.split_ratio, args.seed)
-        model = BaseNet(args.backbone, backbone, dataset.n_classes).to(device)
+        # model = BaseNet(args.backbone, backbone, dataset.n_classes).to(device)
+        model = DistilBertBase.from_pretrained('distilbert-base-uncased', num_labels=dataset.nn_classes).to(device)
         # load biased model
         if args.train_type == 'residual':
             assert args.biased_model_path is not None
