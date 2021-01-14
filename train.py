@@ -61,7 +61,7 @@ def main():
         ], lr=1e-5, eps=1e-8)
     else:
         if args.dataset == 'corona':
-            optimizer = optim.Adam(model.parameters(), lr=5e-5)
+            optimizer = optim.Adam(model.parameters(), lr=5e-5, eps=1e-8)
         else:
             optimizer = optim.Adam(model.parameters(), lr=1e-5, eps=1e-8)
 
@@ -76,8 +76,6 @@ def main():
                              batch_size=args.batch_size, num_workers=0)
 
     print('Training model...')
-    if args.dataset == 'corona' and args.train_type == 'base':
-        args.epochs = 5
 
     for epoch in tqdm(range(1, args.epochs + 1), desc='Epoch'):
         if args.train_type == 'base':
