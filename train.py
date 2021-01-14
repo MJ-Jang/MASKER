@@ -41,7 +41,7 @@ def main():
             dataset = get_biased_dataset(args, args.dataset, tokenizer, args.keyword_type, args.keyword_per_class,
                                          args.split_ratio, args.seed)
         # model = BaseNet(args.backbone, backbone, dataset.n_classes).to(device)
-        model = DistilBertBase.from_pretrained('distilbert-base-uncased', num_labels=dataset.nn_classes).to(device)
+        model = DistilBertBase.from_pretrained('distilbert-base-uncased', num_labels=dataset.n_classes).to(device)
         # load biased model
         if args.train_type == 'residual':
             assert args.biased_model_path is not None
