@@ -13,7 +13,7 @@ from evals import test_acc, test_pearson
 from tqdm import tqdm
 
 from common import CKPT_PATH, parse_args
-from transformers import AdamW
+from transformers import AdamW, DistilBertTokenizerFast
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -30,7 +30,8 @@ def main():
         args.batch_size = 8
 
     print('Loading pre-trained backbone network...')
-    backbone, tokenizer = load_backbone(args.backbone)
+    # backbone, tokenizer = load_backbone(args.backbone)
+    tokenizer = DistilBertTokenizerFast.from_pretrained('distilbert-base-uncased')
 
     print('Initializing dataset and model...')
     if args.train_type in ['base', 'residual']:
