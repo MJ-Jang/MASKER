@@ -39,7 +39,7 @@ class DistilBertBase(DistilBertPreTrainedModel):
         self.num_labels = config.num_labels
         self.n_classes = config.num_labels
 
-        self.backbone = DistilBertModel(config)
+        self.distilbert = DistilBertModel(config)
         self.dense = nn.Linear(config.dim, config.dim)
         self.net_cls = nn.Linear(config.dim, config.num_labels)
         self.dropout = nn.Dropout(config.seq_classif_dropout)
@@ -48,7 +48,7 @@ class DistilBertBase(DistilBertPreTrainedModel):
 
     def forward(self, x):
         attention_mask = (x > 0).long()  # 0 is the pad_token for DistilBERT
-        outputs = self.backbone(x, attention_mask)  # hidden, pooled
+        outputs = self.distilbert(x, attention_mask)  # hidden, pooled
 
         hidden_state = outputs[0]  # (bs, seq_len, dim)
         pooled_output = hidden_state[:, 0]  # (bs, dim)
