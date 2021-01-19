@@ -2,11 +2,13 @@ MODEL_TYPE=$1
 DATA_TYPE=$2
 
 list="01 02 03 04 05 06 07 08 09 10"
-#list="01 02 03 04 05"
+#list="02 03 04 05"
+#list="06 07 08 09 10"
 
 for var in $list
 do
     rm -rf "$DATA_TYPE""_$MODEL_TYPE""-base-uncased_train_masked_attention_10.pth"
+    rm -rf "$DATA_TYPE""_$MODEL_TYPE""-base-uncased.model"    
 
     cmd="python train.py \
     --dataset $DATA_TYPE \
@@ -47,7 +49,7 @@ do
     --backbone $MODEL_TYPE \
     --classifier_type softmax \
     --model_path "$DATA_TYPE""_$MODEL_TYPE""-base-uncased_masker.model" \
-    --save_path=result/$var
+    --save_path="result/$MODEL_TYPE""/$var"
     "
     echo $cmd
     eval $cmd
